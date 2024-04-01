@@ -5,8 +5,6 @@
 #include "../../../../ncs/v2.5.0/nrf/subsys/bluetooth/mesh/model_utils.h"
 
 
-//TODO Add the player information to a central database.
-
 
 //NOTE Initializes the buffer and adds the message content.
 static void vendor_game_modification_encode_status(struct net_buf_simple *buf,
@@ -32,18 +30,10 @@ static void vendor_game_modification_rsp_status(struct bt_mesh_model *model,
 	(void) bt_mesh_model_send(model, rx_ctx, &reply, NULL, NULL);
 }
 
-//TODO
 static int vendor_game_modification_handle_get(struct bt_mesh_model *model,
                                struct bt_mesh_msg_ctx *ctx,
                                struct net_buf_simple *buf)
 {
-	//printk("vendor_game_modification_handle_get\n");
-    //struct bt_mesh_vendor_game_modification_srv *srv = model->user_data;
-	
-	//int err;
-	//TODO Uncommenting below line will cause the programm to crash with a hard fault.
-	//srv->handlers->get(srv, ctx, &player_status);
-
 	vendor_game_modification_rsp_status(model, ctx, &local_player_status);
 
 	return 0;
@@ -105,13 +95,6 @@ static int vendor_game_modification_handle_set_unack(struct bt_mesh_model *model
 
 static int vendor_game_modification_update_handler(struct bt_mesh_model *model)
 {
-	//printk("vendor_game_modification_update_handler\n");
-	//int err;
-	//struct bt_mesh_vendor_game_modification_srv *srv = model->user_data;
-
-
-	//TODO Uncommenting below line will cause the programm to crash with a hard fault.
-	//srv->handlers->get(srv, NULL, &game_modification_player_status);
 	vendor_game_modification_encode_status(model->pub->msg, &local_player_status);
 
 	return 0;
@@ -132,13 +115,6 @@ static int vendor_game_modification_srv_init(struct bt_mesh_model *model)
 	srv->model = model;
 	srv->pub.msg = &srv->pub_buf;
 	srv->pub.update = vendor_game_modification_update_handler;
-	//TODO Model does not automatically start broadcasting after adding a application key. Why?
-	//srv->pub.period = 2;
-	//Publishing to the broadcast address (all nodes)
-	//srv->pub.addr = 0xFFFF;
-	//Message will not be relayed
-	//srv->pub.ttl = 0;
-	//srv->pub.retransmit = 0;
 	net_buf_simple_init_with_data(&srv->pub_buf, srv->pub_data,
 				      sizeof(srv->pub_data));
 	

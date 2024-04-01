@@ -12,7 +12,6 @@ static void vendor_hit_encode_status(struct net_buf_simple *buf,
 	bt_mesh_model_msg_init(buf, BT_MESH_VENDOR_HIT_STATUS_OP);
 
 	//Some debugging
-	// TODO: Remove this
 	printk("Hit_Server: Sending status message..\n\tplayer_id: %d, Lifecount: %d\n", status->player_id, status->player_lifecount);
 
     net_buf_simple_add_u8(buf, status->player_id);
@@ -36,12 +35,6 @@ static int vendor_hit_handle_get(struct bt_mesh_model *model,
                                struct bt_mesh_msg_ctx *ctx,
                                struct net_buf_simple *buf)
 {
-	//printk("Hit_Server: vendor_hit_handle_get\n");
-    //struct bt_mesh_vendor_test_model_srv *srv = model->user_data;
-	
-	//TODO Uncommenting below line will cause the programm to crash with a hard fault.
-	//srv->handlers->get(srv, ctx, &player_status);
-
 	vendor_hit_rsp_status(model, ctx, &local_player_status);
 
 	return 0;
@@ -81,8 +74,6 @@ static int vendor_hit_update_lifecount_self(struct bt_mesh_model *model, struct 
 	}
     
 	srv->handlers->set(srv, ctx, &set, &local_player_status);
-	// TODO Check if below code is necessary.
-	//(void)vendor_hit_srv_pub(srv, NULL, &local_player_status);
 	respond:
 		if (ack) {
 			vendor_hit_rsp_status(model, ctx, &local_player_status);

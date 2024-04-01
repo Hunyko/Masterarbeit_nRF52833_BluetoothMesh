@@ -1,12 +1,3 @@
-/*
- * Copyright (c) 2019 Nordic Semiconductor ASA
- *
- * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
- */
-
-/** @file
- *  @brief Nordic mesh light sample
- */
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/bluetooth/mesh.h>
 #include <bluetooth/mesh/models.h>
@@ -16,7 +7,6 @@
 #include "smp_bt.h"
 #include <zephyr/bluetooth/mesh/cfg_cli.h>
 #include "board.h"
-
 
 static void bt_ready(int err)
 {

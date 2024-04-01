@@ -92,31 +92,3 @@ const struct bt_mesh_model_cb _bt_mesh_vendor_heartbeat_cli_cb = {
 	.init = bt_mesh_vendor_heartbeat_cli_init,
 	.reset = bt_mesh_vendor_heartbeat_cli_reset,
 };
-
-/* Send get message to server model */
-// TODO: This is not needed for the final version.
-#if 0
-int bt_mesh_vendor_heartbeat_cli_get(struct bt_mesh_vendor_heartbeat_cli *cli,
-			  struct bt_mesh_msg_ctx *ctx,
-			  struct bt_mesh_vendor_playerstatus_status *rsp)
-{
-	printk("bt_mesh_vendor_heartbeat_cli_get\n");
-	BT_MESH_MODEL_BUF_DEFINE(msg, BT_MESH_VENDOR_HEARTBEAT_GET_OP,
-				 BT_MESH_VENDOR_HEARTBEAT_MSG_GET_MAX_LEN);
-	bt_mesh_model_msg_init(&msg, BT_MESH_VENDOR_HEARTBEAT_GET_OP);
-
-	struct bt_mesh_msg_rsp_ctx rsp_ctx = {
-		.ack = &cli->ack_ctx,
-		.op = BT_MESH_VENDOR_HEARTBEAT_STATUS_OP,
-		.user_data = rsp,
-		.timeout = model_ackd_timeout_get(cli->model, ctx),
-	};
-
-	//TODO Sending it as ackd message does not work as intended and always leads to a timeout...
-	// The message is sent and responded to only after timing out first.
-	// Currently this is "fixed" by sending non ackd message. Ackd probably is not necessary hear
-	// as get always expects a status response.
-	return bt_mesh_msg_send(cli->model, ctx, &msg);
-	//return bt_mesh_msg_ackd_send(cli->model, ctx, &msg, rsp ? &rsp_ctx : NULL);
-}
-#endif

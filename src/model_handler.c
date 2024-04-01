@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2019 Nordic Semiconductor ASA
- *
- * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
- */
-
 #include <zephyr/bluetooth/bluetooth.h>
 #include <bluetooth/mesh/models.h>
 #include <dk_buttons_and_leds.h>
@@ -23,7 +17,6 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/kernel.h>
 #include "board.h"
-
 
 u_int16_t shots_in_tank = MAX_SHOTS_PER_TANK;
 
@@ -257,7 +250,6 @@ static void button_handler_cb(uint32_t pressed, uint32_t changed)
 				.init_game_delay = 30,
 				.init_game_time = 300,
 			};
-			// Implemented without acknowledgement during testing.
 			printk("Model_Handler: Set Game Modificiation Interrupt Configuration for Arduino.");
 			output_pin_interrupt_set(1, 0, 0);
 			err = bt_mesh_vendor_game_modification_cli_set(&game_ctx[0].cli, NULL, &game_set, NULL);
@@ -269,12 +261,7 @@ static void hit_set(struct bt_mesh_vendor_hit_srv *srv, struct bt_mesh_msg_ctx *
 		    const struct bt_mesh_vendor_hit_set *set,
 		    struct bt_mesh_vendor_playerstatus_status *rsp)
 {
-	//printk("Model_Handler: hit_set\n");
-	//struct hit_ctx *hit = CONTAINER_OF(srv, struct hit_ctx, srv);
-	//int led_idx = hit - &hit_ctx[0];
-	//printk("Updating Player status... Player_ID: %d Lifecount: %d\n", set->player_id, set->player_lifecount);
-
-	
+		
 	output_pin_interrupt_set(0, 0, 1);
 	printk("Model_Handler: Set Hit Interrupt Configuration for Arduino.\n");
 	output_pin_interrupt_reset();
@@ -433,7 +420,6 @@ static struct bt_mesh_elem elements[] = {
 	 		BT_MESH_VENDOR_MODEL_HEARTBEAT_CLI(&heartbeat_ctx[1].cli)),
 			BT_MESH_MODEL_NONE),
 #elif (DEVICE_TO_PROGRAM == HITDETECTION)
-	//TODO: Hearbeat and Playerstatus in only used during development testing.
 	BT_MESH_ELEM(
 		2, BT_MESH_MODEL_LIST(
 			BT_MESH_VENDOR_MODEL_HIT_CLI(&hit_ctx[0].cli)),
@@ -483,7 +469,6 @@ const struct bt_mesh_comp *model_handler_init(void)
 		}
 	}
 	/* Setup of interrupt pin 0. Connected to hit signal from arduino.*/
-	//TODO Add logic to only configure the pins necessary for the device selected as DEVICE_TO_PROGRAM.
 	err = gpio_pin_interrupt_configure_dt(&input_pins[0], GPIO_INT_EDGE_TO_ACTIVE);
 	if (err) {printk("inpu_pins[0] - interrupt_configure: %d\n", err);};
 	gpio_init_callback(&input_pin0_cb, input_pin_isr, BIT(input_pins[0].pin));
@@ -580,22 +565,13 @@ void input_pin_isr(const struct device *dev, struct gpio_callback *cb, uint32_t 
 					.player_id = local_player_status.player_id,
 					.player_lifecount = local_player_status.player_lifecount,
 				};
-				//TODO
-				// Get rid of the button structure and add the client functionality to the input_pin structure.
-				// These structure has to include all the client/server functionality of all the models used.
 					int err;
 					output_pin_interrupt_set(0, 0, 1);
-					// Implemented without acknowledgement during testing.
-					err = bt_mesh_vendor_hit_cli_set(&hit_ctx[0].cli, NULL, &set, NULL);
-					//if (err) {
-					//	 printk("Hit Client Set failed: %d\n", err);
-					//}			
+					err = bt_mesh_vendor_hit_cli_set(&hit_ctx[0].cli, NULL, &set, NULL);	
 					output_pin_interrupt_reset();	
 			} else {
-				// printk("Player Dead\n");
-				// NOTE
-				// Deactivate Shot Button
-				// Deactivate Pump Button
+				//printk("Player Dead\n");
+
 			}    
 			#endif
 			break;

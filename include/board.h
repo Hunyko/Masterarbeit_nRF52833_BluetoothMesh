@@ -11,7 +11,6 @@
 
 */
 
-//TODO: Update the addresses below (ecept from NODE_ADDR) Only placeholders!
 #if PROGRAMM_CLIENT
 #if !defined(NODE_ADDR_SELF)
 #define NODE_ADDR_SELF 0x0b0c

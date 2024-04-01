@@ -3,14 +3,11 @@
 #include <dk_buttons_and_leds.h>
 #include "../../../../../ncs/v2.5.0/nrf/subsys/bluetooth/mesh/model_utils.h"
 
-//TODO Add the player information to a central database.
 
-//TODO Decodes the "payload" of the status message returned by the server model.
 static int vendor_device_modification_decode_status(struct net_buf_simple *buf,
 			  struct bt_mesh_vendor_playerstatus_status *status)
 {
 	printk("vendor_device_modification_decode_status\n");
-	//TODO: Add or check these values with player database.
 	uint8_t active = net_buf_simple_pull_u8(buf);
 	uint8_t game_mode = net_buf_simple_pull_u8(buf);
 
@@ -110,10 +107,6 @@ int bt_mesh_vendor_device_modification_cli_get(struct bt_mesh_vendor_device_modi
 		.timeout = model_ackd_timeout_get(cli->model, ctx),
 	};
 
-	//TODO Sending it as ackd message does not work as intended and always leads to a timeout...
-	// The message is sent and responded to only after timing out first.
-	// Currently this is "fixed" by sending non ackd message. Ackd probably is not necessary hear
-	// as get always expects a status response.
 	return bt_mesh_msg_send(cli->model, ctx, &msg);
 	//return bt_mesh_msg_ackd_send(cli->model, ctx, &msg, rsp ? &rsp_ctx : NULL);
 }

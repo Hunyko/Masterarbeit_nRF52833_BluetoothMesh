@@ -1,13 +1,3 @@
-/*
- * Copyright (c) 2019 Nordic Semiconductor ASA
- *
- * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
- */
-
-/**
- * @file
- * @brief Model handler
- */
 
 #ifndef MODEL_HANDLER_H__
 #define MODEL_HANDLER_H__

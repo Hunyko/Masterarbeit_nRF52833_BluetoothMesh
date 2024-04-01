@@ -16,10 +16,6 @@ static int vendor_playerstatus_decode_status(struct net_buf_simple *buf,
 	status->tank_left =  net_buf_simple_pull_u8(buf);
 	printk("\ttank_left: %d/255\n", status->tank_left);
 	status->tanks_since_init = net_buf_simple_pull_u8(buf);
-	//printk("\ttanks_since_init: %d\n", status->tanks_since_init);
-	//TODO Check how the battery status can be pulled from the buffer using a simple command like pull_u8
-	//status->battery_status = net_buf_simple_pull_u8(buf);
-	//printk("CLI - status->battery_status: %d\n", status->battery_status);
 
 	return 0;
 }
@@ -114,10 +110,5 @@ int bt_mesh_vendor_playerstatus_cli_get(struct bt_mesh_vendor_playerstatus_cli *
 		.timeout = model_ackd_timeout_get(cli->model, ctx),
 	};
 
-	//TODO Sending it as ackd message does not work as intended and always leads to a timeout...
-	// The message is sent and responded to only after timing out first.
-	// Currently this is "fixed" by sending non ackd message. Ackd probably is not necessary hear
-	// as get always expects a status response.
 	return bt_mesh_msg_send(cli->model, ctx, &msg);
-	//return bt_mesh_msg_ackd_send(cli->model, ctx, &msg, rsp ? &rsp_ctx : NULL);
 }
